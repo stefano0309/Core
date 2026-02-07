@@ -175,82 +175,66 @@ function checkScheduleReset() {
     }
 }
 
-
-
-
-// Inserisci queste funzioni nella sezione logica
-async function loadHabits() {
-    try {
-        const response = await fetch(HABITS_URL);
-        habitDataStore = await response.json();
-        renderHabitGrid();
-    } catch (e) { console.warn("Server non raggiungibile per Habits"); }
-}
-
-async function syncHabits() {
-    await loadHabits();
-}
-
-async function saveHabit() {
-    const date = document.getElementById('habit-date').value;
-    const sveglia = document.getElementById('habit-sveglia').value;
-    const sonno = document.getElementById('habit-sonno').value;
-    const workout = document.getElementById('habit-allenamento').checked;
-
-    if(!date || !sveglia || !sonno) return alert("MISSING_DATA");
-
-    // Calcolo punteggio (0-4)
-    let score = 0;
-    const hSveglia = parseInt(sveglia.split(':')[0]);
-    if(hSveglia <= 6) score += 2; // Sveglia presto = +2
-    if(workout) score += 2;      // Workout = +2
-
-    habitDataStore[date] = score;
-
-    try {
-        await fetch(HABITS_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(habitDataStore)
-        });
-        renderHabitGrid();
-    } catch (e) { console.error("Errore salvataggio habit", e); }
-}
-
+// --- CORREZIONE RENDERING HEATMAP ---
 function renderHabitGrid() {
     const grid = document.getElementById('habit-grid');
     const label = document.getElementById('month-label');
-    if(!grid) return;
+    if (!grid || !label) return;
 
     grid.innerHTML = '';
-    const y = currentHabitDate.getFullYear();
-    const m = currentHabitDate.getMonth();
     
-    label.innerText = `${new Intl.DateTimeFormat('it-IT', { month: 'long' }).toUpperCase()} ${y}`;
+    const y = currentViewDate.getFullYear();
+    const m = currentViewDate.getMonth();
+    
+    // Correzione errore toUpperCase()
+    const monthName = new Intl.DateTimeFormat('it-IT', { month: 'long', year: 'numeric' }).format(currentViewDate);
+    label.innerText = monthName.toUpperCase();
 
     const firstDay = new Date(y, m, 1).getDay();
+    // Lunedì deve essere 0, Domenica 6
     const offset = firstDay === 0 ? 6 : firstDay - 1;
+
+    for (let i = 0; i < offset; i++) {
+        const emptyDiv = document.createElement('div');
+        grid.appendChild(emptyDiv);
+    }
+
     const daysInMonth = new Date(y, m + 1, 0).getDate();
-
-    for (let i = 0; i < offset; i++) grid.appendChild(document.createElement('div'));
-
     for (let d = 1; d <= daysInMonth; d++) {
         const dateKey = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
         const cell = document.createElement('div');
         cell.className = 'habit-cell';
         cell.innerText = d;
         
-        if (habitDataStore[dateKey]) {
+        if (habitDataStore && habitDataStore[dateKey]) {
             cell.classList.add(`h-lvl-${habitDataStore[dateKey]}`);
         }
         grid.appendChild(cell);
     }
 }
 
-
+// --- CORREZIONE SYNC HABITS ---
+async function syncHabits() {
+    await loadHabits();
+}
 
 // 9. INIZIALIZZAZIONE
 document.addEventListener('DOMContentLoaded', () => {
+    const saveBtn = document.getElementById('save-habit-btn');
+    if(saveBtn) saveBtn.onclick = saveHabit;
+
+    const prevBtn = document.getElementById('prev-month');
+    if(prevBtn) prevBtn.onclick = () => { 
+        currentViewDate.setMonth(currentViewDate.getMonth() - 1); 
+        renderHabitGrid(); 
+    };
+
+    const nextBtn = document.getElementById('next-month');
+    if(nextBtn) nextBtn.onclick = () => { 
+        currentViewDate.setMonth(currentViewDate.getMonth() + 1); 
+        renderHabitGrid(); 
+    };
+
     // Input meteo
     const cityInput = document.getElementById('city-input');
     if(cityInput) {
@@ -270,20 +254,13 @@ document.addEventListener('DOMContentLoaded', () => {
             // Se è il checkbox che nasconde la tabella, attiva la funzione
             if(e.target.id === 'workoutOption') workoutTable();
         }
-    });
-
-    document.getElementById('save-habit-btn').onclick = saveHabit;
-    document.getElementById('prev-month').onclick = () => { currentHabitDate.setMonth(currentHabitDate.getMonth() - 1); renderHabitGrid(); };
-    document.getElementById('next-month').onclick = () => { currentHabitDate.setMonth(currentHabitDate.getMonth() + 1); renderHabitGrid(); };
-    document.getElementById('habit-date').valueAsDate = new Date();
-
-    
+    });   
 
     // Avvio cicli
     setInterval(updateClock, 1000);
     setInterval(syncTasks, 5000); 
     setInterval(syncRoutines, 5000);
-    setInterval(syncHabits, 5000)
+    setInterval(syncHabits, 10000)
     setInterval(highlightToday, 60000);
 
     // Primo caricamento

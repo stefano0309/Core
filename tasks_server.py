@@ -58,7 +58,6 @@ def reset_routine():
     save_data(ROUTINE_FILE, [])
     return jsonify({"status": "reset completato"}), 200
 
-# Aggiungi queste due rotte alla fine del file, prima di if __name__ == '__main__':
 @app.route('/habits', methods=['GET'])
 def get_habits():
     return jsonify(load_data(HABITS_FILE))

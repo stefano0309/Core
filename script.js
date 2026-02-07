@@ -208,6 +208,6 @@ document.addEventListener('DOMContentLoaded', () => {
     highlightToday();
     
     // Sostituito syncDashboard con le chiamate corrette
-    syncTasks();
-    syncRoutines();
+    loadTasksFromServer();
+    loadRoutineFromServer();
 });

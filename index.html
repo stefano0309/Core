@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CORE DASHBOARD</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="main-screen">
         <header>
@@ -17,7 +19,7 @@
                 <div id="date-display">00. 00. 00</div>
                 <div id="digital-clock">00:00:00</div>
             </div>
-            
+
             <div class="weather-card">
                 <div class="weather-info">
                     <p>CITY: <span id="city">ROMA</span></p>
@@ -118,61 +120,67 @@
             <div class="routine-container">
                 <h3>// routine</h3>
                 <ul id="routine-table">
-                    
-                            <li><span><input type="checkbox" id="chkSveglia"></span> Sveglia 5:00</li>
-                            <li><span><input type="checkbox" id="chkAcqua"></span> Acqua 0.5L</li>
-                            <li><span><input type="checkbox" id="chkLetto"></span> Letto</li>
-                            <li><span><input type="checkbox" id="chkPersiane"></span> Persiane</li>
-                            <li><span><input type="checkbox" onchange="workoutTable()" id="workoutOption"></span> Allenamento</li>
-                                <table id="workoutTable">
-                                    <thead>
-                                        <th>Lunedi</th>
-                                        <th>Martedi</th>
-                                        <th>Giovedi</th>
-                                        <th class="ultima">Sabato</th>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Push up -> 4xMax</td>
-                                            <td>Rematore elastico -> 4x15</td>  
-                                            <td>Goblet squat -> 4x15</td>
-                                            <td class="ultima">Arnold press -> 4x10</td>                               
-                                        </tr>
-                                        <tr>
-                                            <td>Floor press manubri -> 4x12</td>
-                                            <td>Rematore mnubrio -> 4x12/lato</td>
-                                            <td>Bulgarian split squat -> 3x10/lato</td>
-                                            <td class="ultima">Alzate laterali drop -> 4 serie</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Military press manubri -> 4x12</td>
-                                            <td>Pullover -> 3x12</td>
-                                            <td>Staccoo rimeno -> 4x12</td>
-                                            <td class="ultima">Face Pull -> 4x20</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Alzate lateralli -> 5x20</td>
-                                            <td>Curl manubri lento -> 3x12</td>
-                                            <td>Hip thrust -> 4x15</td>
-                                            <td class="ultima">Planck -> 3x60s sec</td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td>Face pull elastico ->3x20</td>
-                                            <td>Polpacci -> 4x25</td>
-                                            <td class="ultima">Leg raises -> 3x15</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            <li><span><input type="checkbox" id="chkDoccia"></span> Doccia</li>
-                            <li><span><input type="checkbox" id="chkFaccia"></span> Faccia</li>
-                            <li><span><input type="checkbox" id="chkVestiti"></span> Vestiti</li>
-                            <li><span><input type="checkbox" id="chkCartella"></span> Cartella</li>
-                            <li><span><input type="checkbox" id="chkLeggere"></span> Leggere</li>
+                    <li><span><input type="checkbox" id="chkSveglia"></span> Sveglia 5:00</li>
+                    <li><span><input type="checkbox" id="chkAcqua"></span> Acqua 0.5L</li>
+                    <li><span><input type="checkbox" id="chkLetto"></span> Letto</li>
+                    <li><span><input type="checkbox" id="chkPersiane"></span> Persiane</li>
+                    <li>
+                        <span><input type="checkbox" onchange="workoutTable()" id="workoutOption"></span> Allenamento
+                    </li>
+
+                    <table id="workoutTable">
+                        <thead>
+                            <tr>
+                                <th>Lunedi</th>
+                                <th>Martedi</th>
+                                <th>Giovedi</th>
+                                <th class="ultima">Sabato</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Push up -> 4xMax</td>
+                                <td>Rematore elastico -> 4x15</td>
+                                <td>Goblet squat -> 4x15</td>
+                                <td class="ultima">Arnold press -> 4x10</td>
+                            </tr>
+                            <tr>
+                                <td>Floor press manubri -> 4x12</td>
+                                <td>Rematore mnubrio -> 4x12/lato</td>
+                                <td>Bulgarian split squat -> 3x10/lato</td>
+                                <td class="ultima">Alzate laterali drop -> 4 serie</td>
+                            </tr>
+                            <tr>
+                                <td>Military press manubri -> 4x12</td>
+                                <td>Pullover -> 3x12</td>
+                                <td>Staccoo rimeno -> 4x12</td>
+                                <td class="ultima">Face Pull -> 4x20</td>
+                            </tr>
+                            <tr>
+                                <td>Alzate lateralli -> 5x20</td>
+                                <td>Curl manubri lento -> 3x12</td>
+                                <td>Hip thrust -> 4x15</td>
+                                <td class="ultima">Planck -> 3x60s sec</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>Face pull elastico ->3x20</td>
+                                <td>Polpacci -> 4x25</td>
+                                <td class="ultima">Leg raises -> 3x15</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <li><span><input type="checkbox" id="chkDoccia"></span> Doccia</li>
+                    <li><span><input type="checkbox" id="chkFaccia"></span> Faccia</li>
+                    <li><span><input type="checkbox" id="chkVestiti"></span> Vestiti</li>
+                    <li><span><input type="checkbox" id="chkCartella"></span> Cartella</li>
+                    <li><span><input type="checkbox" id="chkLeggere"></span> Leggere</li>
                 </ul>
             </div>
         </div>
     </div>
     <script src="script.js"></script>
 </body>
+
 </html>

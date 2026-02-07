@@ -3,6 +3,9 @@ const apiKey = "29c8f4131ebc58d89d3594f4db6fdb97";
 const IP_PI = "192.168.1.234";
 const SERVER_URL = `http://${IP_PI}:5000/tasks`;
 const ROUTINE_URL = `http://${IP_PI}:5000/routine`;
+const HABITS_URL = `http://${IP_PI}:5000/habits`;
+let currentHabitDate = new Date();
+let habitDataStore = {};
 
 // Stato locale per evitare aggiornamenti inutili del DOM
 let lastTasksJSON = "";
@@ -172,6 +175,80 @@ function checkScheduleReset() {
     }
 }
 
+
+
+
+// Inserisci queste funzioni nella sezione logica
+async function loadHabits() {
+    try {
+        const response = await fetch(HABITS_URL);
+        habitDataStore = await response.json();
+        renderHabitGrid();
+    } catch (e) { console.warn("Server non raggiungibile per Habits"); }
+}
+
+async function syncHabits() {
+    await loadHabits();
+}
+
+async function saveHabit() {
+    const date = document.getElementById('habit-date').value;
+    const sveglia = document.getElementById('habit-sveglia').value;
+    const sonno = document.getElementById('habit-sonno').value;
+    const workout = document.getElementById('habit-allenamento').checked;
+
+    if(!date || !sveglia || !sonno) return alert("MISSING_DATA");
+
+    // Calcolo punteggio (0-4)
+    let score = 0;
+    const hSveglia = parseInt(sveglia.split(':')[0]);
+    if(hSveglia <= 6) score += 2; // Sveglia presto = +2
+    if(workout) score += 2;      // Workout = +2
+
+    habitDataStore[date] = score;
+
+    try {
+        await fetch(HABITS_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(habitDataStore)
+        });
+        renderHabitGrid();
+    } catch (e) { console.error("Errore salvataggio habit", e); }
+}
+
+function renderHabitGrid() {
+    const grid = document.getElementById('habit-grid');
+    const label = document.getElementById('month-label');
+    if(!grid) return;
+
+    grid.innerHTML = '';
+    const y = currentHabitDate.getFullYear();
+    const m = currentHabitDate.getMonth();
+    
+    label.innerText = `${new Intl.DateTimeFormat('it-IT', { month: 'long' }).toUpperCase()} ${y}`;
+
+    const firstDay = new Date(y, m, 1).getDay();
+    const offset = firstDay === 0 ? 6 : firstDay - 1;
+    const daysInMonth = new Date(y, m + 1, 0).getDate();
+
+    for (let i = 0; i < offset; i++) grid.appendChild(document.createElement('div'));
+
+    for (let d = 1; d <= daysInMonth; d++) {
+        const dateKey = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const cell = document.createElement('div');
+        cell.className = 'habit-cell';
+        cell.innerText = d;
+        
+        if (habitDataStore[dateKey]) {
+            cell.classList.add(`h-lvl-${habitDataStore[dateKey]}`);
+        }
+        grid.appendChild(cell);
+    }
+}
+
+
+
 // 9. INIZIALIZZAZIONE
 document.addEventListener('DOMContentLoaded', () => {
     // Input meteo
@@ -195,10 +272,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    document.getElementById('save-habit-btn').onclick = saveHabit;
+    document.getElementById('prev-month').onclick = () => { currentHabitDate.setMonth(currentHabitDate.getMonth() - 1); renderHabitGrid(); };
+    document.getElementById('next-month').onclick = () => { currentHabitDate.setMonth(currentHabitDate.getMonth() + 1); renderHabitGrid(); };
+    document.getElementById('habit-date').valueAsDate = new Date();
+
+    
+
     // Avvio cicli
     setInterval(updateClock, 1000);
     setInterval(syncTasks, 5000); 
     setInterval(syncRoutines, 5000);
+    setInterval(syncHabits, 5000)
     setInterval(highlightToday, 60000);
 
     // Primo caricamento
@@ -210,4 +295,5 @@ document.addEventListener('DOMContentLoaded', () => {
     // Sostituito syncDashboard con le chiamate corrette
     loadTasksFromServer();
     loadRoutineFromServer();
+    loadHabits(); 
 });

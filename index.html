@@ -178,6 +178,41 @@
                     <li><span><input type="checkbox" id="chkLeggere"></span> Leggere</li>
                 </ul>
             </div>
+            <div class="habit-tracker-full">
+                <h3>// HABIT_PERSISTENCE_GRID</h3>
+                <div class="habit-content">
+                    <div class="habit-inputs">
+                        <div class="input-group">
+                            <input type="date" id="habit-date">
+                        </div>
+                        <div class="input-group">
+                            <input type="time" id="habit-sveglia" title="Sveglia">
+                            <input type="time" id="habit-sonno" title="Sonno">
+                        </div>
+                        <div class="input-group">
+                            <label style="font-size: 0.8rem;">
+                                <input type="checkbox" id="habit-allenamento"> WORKOUT
+                            </label>
+                            <button id="save-habit-btn">LOG_DATA</button>
+                        </div>
+                    </div>
+
+                    <div class="habit-display">
+                        <div class="habit-nav">
+                            <button id="prev-month">
+                                << /button>
+                                    <span id="month-label">MONTH_LOADING</span>
+                                    <button id="next-month">></button>
+                        </div>
+                        <div class="heatmap-wrapper">
+                            <div class="days-header">
+                                <span>L</span><span>M</span><span>M</span><span>G</span><span>V</span><span>S</span><span>D</span>
+                            </div>
+                            <div id="habit-grid" class="habit-grid"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <script src="script.js"></script>

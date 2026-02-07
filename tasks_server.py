@@ -8,6 +8,7 @@ CORS(app)
 
 TASKS_FILE = "tasks.json"
 ROUTINE_FILE = "routine.json"
+HABITS_FILE = "habits.json"
 
 # --- LOGICA DI CARICAMENTO/SALVATAGGIO ---
 
@@ -56,6 +57,17 @@ def save_routine():
 def reset_routine():
     save_data(ROUTINE_FILE, [])
     return jsonify({"status": "reset completato"}), 200
+
+# Aggiungi queste due rotte alla fine del file, prima di if __name__ == '__main__':
+@app.route('/habits', methods=['GET'])
+def get_habits():
+    return jsonify(load_data(HABITS_FILE))
+
+@app.route('/habits', methods=['POST'])
+def save_habits():
+    habits_data = request.json
+    save_data(HABITS_FILE, habits_data)
+    return jsonify({"status": "success"}), 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

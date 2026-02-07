@@ -5,8 +5,8 @@ const SERVER_URL = `http://${IP_PI}:5000/tasks`;
 const ROUTINE_URL = `http://${IP_PI}:5000/routine`;
 const HABITS_URL = `http://${IP_PI}:5000/habits`;
 
-let currentHabitDate = new Date();
-let habitDataStore = {};
+let habitDataStore = {}; 
+let currentViewDate = new Date();
 
 // Stato locale per evitare aggiornamenti inutili del DOM
 let lastTasksJSON = "";

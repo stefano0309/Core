@@ -175,6 +175,68 @@ function checkScheduleReset() {
     }
 }
 
+// --- FUNZIONE SALVATAGGIO ABITUDINI ---
+async function saveHabit() {
+    const dateEl = document.getElementById('habit-date');
+    const svegliaEl = document.getElementById('habit-sveglia');
+    const workoutEl = document.getElementById('habit-allenamento');
+
+    // Controllo validità input
+    if (!dateEl.value || !svegliaEl.value) {
+        alert("ERRORE: DATA O ORARIO MANCANTI");
+        return;
+    }
+
+    const date = dateEl.value;
+    const sveglia = svegliaEl.value;
+    const workout = workoutEl.checked;
+    
+    // Logica punteggio CORE (0-4)
+    let score = 0;
+    const oraSveglia = parseInt(sveglia.split(':')[0]);
+    
+    if (oraSveglia <= 6) score += 2; // Bonus sveglia presto
+    if (workout) score += 2;        // Bonus allenamento
+    
+    // Aggiornamento stato locale
+    habitDataStore[date] = score;
+
+    try {
+        const response = await fetch(HABITS_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(habitDataStore)
+        });
+
+        if (response.ok) {
+            console.log("LOG: HABIT_SAVED_SUCCESSFULLY");
+            renderHabitGrid(); // Ricarica la griglia con i nuovi colori
+        } else {
+            console.error("LOG: SERVER_RESPONSE_ERROR");
+        }
+    } catch (e) {
+        console.error("LOG: NETWORK_ERROR_DURING_SAVE", e);
+        alert("ERRORE DI RETE: DATI NON SALVATI SUL SERVER");
+    }
+}
+
+// --- FUNZIONE CARICAMENTO (Per evitare l'errore "Server non raggiungibile") ---
+async function loadHabits() {
+    try {
+        const response = await fetch(HABITS_URL);
+        if (response.ok) {
+            const data = await response.json();
+            // Se il server è vuoto o il file non esiste, assicurati che sia un oggetto {}
+            habitDataStore = (data && !Array.isArray(data)) ? data : {};
+            renderHabitGrid();
+        }
+    } catch (e) {
+        console.warn("LOG: STANDALONE_MODE_ACTIVE (SERVER_UNREACHABLE)");
+    }
+}
+
 // --- CORREZIONE RENDERING HEATMAP ---
 function renderHabitGrid() {
     const grid = document.getElementById('habit-grid');

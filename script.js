@@ -221,7 +221,7 @@ async function syncHabits() {
 // 9. INIZIALIZZAZIONE
 document.addEventListener('DOMContentLoaded', () => {
     const saveBtn = document.getElementById('save-habit-btn');
-    if(saveBtn) saveBtn.onclick = saveHabit;
+    if(saveBtn) saveBtn.onclick = saveHabit();
 
     const prevBtn = document.getElementById('prev-month');
     if(prevBtn) prevBtn.onclick = () => { 

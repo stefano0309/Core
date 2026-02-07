@@ -14,18 +14,25 @@ HABITS_FILE = "habits.json"
 
 def load_data(file_path):
     if not os.path.exists(file_path):
-        return []
+        # Fondamentale: Habits deve essere un dizionario {}, Tasks/Routine una lista []
+        return {} if "habits" in file_path else []
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             content = f.read().strip()
-            return json.loads(content) if content else []
+            if not content:
+                return {} if "habits" in file_path else []
+            return json.loads(content)
     except Exception as e:
         print(f"Errore caricamento {file_path}: {e}")
-        return []
+        return {} if "habits" in file_path else []
 
 def save_data(file_path, data):
-    with open(file_path, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
+    try:
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
+        print(f"LOG: File {file_path} salvato con successo.")
+    except Exception as e:
+        print(f"Errore scrittura {file_path}: {e}"
 
 # --- ROTTE API ---
 

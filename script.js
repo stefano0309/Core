@@ -188,66 +188,49 @@ async function saveHabit() {
     const sveglia = svegliaInput.value;
     const workout = workoutInput.checked;
     
-    // Calcolo punteggio CORE (0-4)
     let score = 0;
     const oraSveglia = parseInt(sveglia.split(':')[0]);
     if (oraSveglia <= 6) score += 2;
     if (workout) score += 2;
     
-    habitDataStore[date] = score;
+    // LOGICA PER LISTA []:
+    // Cerchiamo se esiste già un record per questa data
+    const existingIndex = habitDataStore.findIndex(entry => entry.date === date);
+
+    if (existingIndex !== -1) {
+        // Se esiste, aggiorna lo score
+        habitDataStore[existingIndex].score = score;
+    } else {
+        // Altrimenti aggiungi un nuovo oggetto alla lista
+        habitDataStore.push({ date: date, score: score });
+    }
 
     try {
-        const response = await fetch(HABITS_URL, {
+        await fetch(HABITS_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(habitDataStore)
         });
-        
-        if (response.ok) {
-            console.log("LOG: HABITS_PUSHED_TO_SERVER");
-            renderHabitGrid();
-        }
+        renderHabitGrid();
     } catch (e) {
-        console.error("LOG: SERVER_OFFLINE_SAVING_LOCAL");
-        renderHabitGrid(); // Mostra comunque il risultato anche se il server è giù
+        console.error("Errore salvataggio", e);
+        renderHabitGrid();
     }
 }
 
 // --- FUNZIONE CARICAMENTO (Corretta) ---
-async function loadHabits() {
-    try {
-        const response = await fetch(HABITS_URL);
-        if (!response.ok) throw new Error("SERVER_HTTP_ERROR");
-        
-        const data = await response.json();
-        // Verifichiamo che i dati siano un oggetto valido e non una lista vuota []
-        habitDataStore = (data && typeof data === 'object' && !Array.isArray(data)) ? data : {};
-        
-        console.log("LOG: HABITS_SYNCED");
-        renderHabitGrid();
-    } catch (e) {
-        console.warn("LOG: SERVER_UNREACHABLE - CHECK IP_PI OR PORT");
-        habitDataStore = {}; // Fallback oggetto vuoto
-        renderHabitGrid();
-    }
-}
-
-// --- CORREZIONE RENDERING HEATMAP ---
 function renderHabitGrid() {
     const grid = document.getElementById('habit-grid');
     const label = document.getElementById('month-label');
     if (!grid || !label) return;
 
     grid.innerHTML = '';
-    
     const y = currentViewDate.getFullYear();
     const m = currentViewDate.getMonth();
 
-    // Formattazione sicura del titolo
     const monthName = new Intl.DateTimeFormat('it-IT', { month: 'long', year: 'numeric' }).format(currentViewDate);
     label.innerText = monthName.toUpperCase();
 
-    // Calcolo offset giorni
     const firstDay = new Date(y, m, 1).getDay();
     const offset = (firstDay === 0) ? 6 : firstDay - 1;
 
@@ -262,8 +245,46 @@ function renderHabitGrid() {
         cell.className = 'habit-cell';
         cell.innerText = d;
         
-        if (habitDataStore[dateKey]) {
-            cell.classList.add(`h-lvl-${habitDataStore[dateKey]}`);
+        // RICERCA NELLA LISTA []:
+        const record = habitDataStore.find(entry => entry.date === dateKey);
+        if (record && record.score) {
+            cell.classList.add(`h-lvl-${record.score}`);
+        }
+        grid.appendChild(cell);
+    }
+}
+
+// --- CORREZIONE RENDERING HEATMAP ---
+function renderHabitGrid() {
+    const grid = document.getElementById('habit-grid');
+    const label = document.getElementById('month-label');
+    if (!grid || !label) return;
+
+    grid.innerHTML = '';
+    const y = currentViewDate.getFullYear();
+    const m = currentViewDate.getMonth();
+
+    const monthName = new Intl.DateTimeFormat('it-IT', { month: 'long', year: 'numeric' }).format(currentViewDate);
+    label.innerText = monthName.toUpperCase();
+
+    const firstDay = new Date(y, m, 1).getDay();
+    const offset = (firstDay === 0) ? 6 : firstDay - 1;
+
+    for (let i = 0; i < offset; i++) {
+        grid.appendChild(document.createElement('div'));
+    }
+
+    const daysInMonth = new Date(y, m + 1, 0).getDate();
+    for (let d = 1; d <= daysInMonth; d++) {
+        const dateKey = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const cell = document.createElement('div');
+        cell.className = 'habit-cell';
+        cell.innerText = d;
+        
+        // RICERCA NELLA LISTA []:
+        const record = habitDataStore.find(entry => entry.date === dateKey);
+        if (record && record.score) {
+            cell.classList.add(`h-lvl-${record.score}`);
         }
         grid.appendChild(cell);
     }

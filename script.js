@@ -4,6 +4,7 @@ const IP_PI = "192.168.1.234";
 const SERVER_URL = `http://${IP_PI}:5000/tasks`;
 const ROUTINE_URL = `http://${IP_PI}:5000/routine`;
 const HABITS_URL = `http://${IP_PI}:5000/habits`;
+
 let currentHabitDate = new Date();
 let habitDataStore = {};
 
@@ -181,7 +182,6 @@ async function saveHabit() {
     const svegliaEl = document.getElementById('habit-sveglia');
     const workoutEl = document.getElementById('habit-allenamento');
 
-    // Controllo validità input
     if (!dateEl.value || !svegliaEl.value) {
         alert("ERRORE: DATA O ORARIO MANCANTI");
         return;
@@ -191,34 +191,26 @@ async function saveHabit() {
     const sveglia = svegliaEl.value;
     const workout = workoutEl.checked;
     
-    // Logica punteggio CORE (0-4)
     let score = 0;
     const oraSveglia = parseInt(sveglia.split(':')[0]);
+    if (oraSveglia <= 6) score += 2;
+    if (workout) score += 2;
     
-    if (oraSveglia <= 6) score += 2; // Bonus sveglia presto
-    if (workout) score += 2;        // Bonus allenamento
-    
-    // Aggiornamento stato locale
     habitDataStore[date] = score;
 
     try {
         const response = await fetch(HABITS_URL, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(habitDataStore)
         });
 
         if (response.ok) {
-            console.log("LOG: HABIT_SAVED_SUCCESSFULLY");
-            renderHabitGrid(); // Ricarica la griglia con i nuovi colori
-        } else {
-            console.error("LOG: SERVER_RESPONSE_ERROR");
+            renderHabitGrid();
         }
     } catch (e) {
-        console.error("LOG: NETWORK_ERROR_DURING_SAVE", e);
-        alert("ERRORE DI RETE: DATI NON SALVATI SUL SERVER");
+        console.error("SERVER_UNREACHABLE: Salvataggio locale temporaneo.");
+        renderHabitGrid();
     }
 }
 
@@ -247,18 +239,17 @@ function renderHabitGrid() {
     
     const y = currentViewDate.getFullYear();
     const m = currentViewDate.getMonth();
-    
-    // Correzione errore toUpperCase()
+
+    // Formattazione sicura del titolo
     const monthName = new Intl.DateTimeFormat('it-IT', { month: 'long', year: 'numeric' }).format(currentViewDate);
     label.innerText = monthName.toUpperCase();
 
+    // Calcolo offset giorni
     const firstDay = new Date(y, m, 1).getDay();
-    // Lunedì deve essere 0, Domenica 6
-    const offset = firstDay === 0 ? 6 : firstDay - 1;
+    const offset = (firstDay === 0) ? 6 : firstDay - 1;
 
     for (let i = 0; i < offset; i++) {
-        const emptyDiv = document.createElement('div');
-        grid.appendChild(emptyDiv);
+        grid.appendChild(document.createElement('div'));
     }
 
     const daysInMonth = new Date(y, m + 1, 0).getDate();
@@ -268,7 +259,7 @@ function renderHabitGrid() {
         cell.className = 'habit-cell';
         cell.innerText = d;
         
-        if (habitDataStore && habitDataStore[dateKey]) {
+        if (habitDataStore[dateKey]) {
             cell.classList.add(`h-lvl-${habitDataStore[dateKey]}`);
         }
         grid.appendChild(cell);

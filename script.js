@@ -176,6 +176,19 @@ function checkScheduleReset() {
     }
 }
 
+async function loadHabits() {
+    try {
+        const response = await fetch(HABITS_URL);
+        const data = await response.json();
+        habitDataStore = Array.isArray(data) ? data : [];
+        renderHabitGrid();
+    } catch (e) {
+        console.warn("Server non raggiungibile per Habits");
+        habitDataStore = [];
+        renderHabitGrid();
+    }
+}
+
 // --- FUNZIONE SALVATAGGIO ABITUDINI ---
 async function saveHabit() {
     const dateInput = document.getElementById('habit-date');

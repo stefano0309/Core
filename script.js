@@ -178,19 +178,17 @@ function checkScheduleReset() {
 
 // --- FUNZIONE SALVATAGGIO ABITUDINI ---
 async function saveHabit() {
-    const dateEl = document.getElementById('habit-date');
-    const svegliaEl = document.getElementById('habit-sveglia');
-    const workoutEl = document.getElementById('habit-allenamento');
+    const dateInput = document.getElementById('habit-date');
+    const svegliaInput = document.getElementById('habit-sveglia');
+    const workoutInput = document.getElementById('habit-allenamento');
 
-    if (!dateEl.value || !svegliaEl.value) {
-        alert("ERRORE: DATA O ORARIO MANCANTI");
-        return;
-    }
+    if (!dateInput.value) return alert("DATA_MISSING");
 
-    const date = dateEl.value;
-    const sveglia = svegliaEl.value;
-    const workout = workoutEl.checked;
+    const date = dateInput.value;
+    const sveglia = svegliaInput.value;
+    const workout = workoutInput.checked;
     
+    // Calcolo punteggio CORE (0-4)
     let score = 0;
     const oraSveglia = parseInt(sveglia.split(':')[0]);
     if (oraSveglia <= 6) score += 2;
@@ -204,28 +202,33 @@ async function saveHabit() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(habitDataStore)
         });
-
+        
         if (response.ok) {
+            console.log("LOG: HABITS_PUSHED_TO_SERVER");
             renderHabitGrid();
         }
     } catch (e) {
-        console.error("SERVER_UNREACHABLE: Salvataggio locale temporaneo.");
-        renderHabitGrid();
+        console.error("LOG: SERVER_OFFLINE_SAVING_LOCAL");
+        renderHabitGrid(); // Mostra comunque il risultato anche se il server è giù
     }
 }
 
-// --- FUNZIONE CARICAMENTO (Per evitare l'errore "Server non raggiungibile") ---
+// --- FUNZIONE CARICAMENTO (Corretta) ---
 async function loadHabits() {
     try {
         const response = await fetch(HABITS_URL);
-        if (response.ok) {
-            const data = await response.json();
-            // Se il server è vuoto o il file non esiste, assicurati che sia un oggetto {}
-            habitDataStore = (data && !Array.isArray(data)) ? data : {};
-            renderHabitGrid();
-        }
+        if (!response.ok) throw new Error("SERVER_HTTP_ERROR");
+        
+        const data = await response.json();
+        // Verifichiamo che i dati siano un oggetto valido e non una lista vuota []
+        habitDataStore = (data && typeof data === 'object' && !Array.isArray(data)) ? data : {};
+        
+        console.log("LOG: HABITS_SYNCED");
+        renderHabitGrid();
     } catch (e) {
-        console.warn("LOG: STANDALONE_MODE_ACTIVE (SERVER_UNREACHABLE)");
+        console.warn("LOG: SERVER_UNREACHABLE - CHECK IP_PI OR PORT");
+        habitDataStore = {}; // Fallback oggetto vuoto
+        renderHabitGrid();
     }
 }
 

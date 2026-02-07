@@ -199,12 +199,15 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateClock, 1000);
     setInterval(syncTasks, 5000); 
     setInterval(syncRoutines, 5000);
-    setInterval(highlightToday, 60000); // Inutile farlo ogni secondo, basta ogni minuto
+    setInterval(highlightToday, 60000);
 
     // Primo caricamento
     updateClock();
     checkWeather("Rocca De Baldi");
     getQuote();
     highlightToday();
-    syncDashboard();
+    
+    // Sostituito syncDashboard con le chiamate corrette
+    syncTasks();
+    syncRoutines();
 });

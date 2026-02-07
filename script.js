@@ -5,7 +5,7 @@ const SERVER_URL = `http://${IP_PI}:5000/tasks`;
 const ROUTINE_URL = `http://${IP_PI}:5000/routine`;
 const HABITS_URL = `http://${IP_PI}:5000/habits`;
 
-let habitDataStore = {}; 
+let habitDataStore = []; 
 let currentViewDate = new Date();
 
 // Stato locale per evitare aggiornamenti inutili del DOM
@@ -298,7 +298,7 @@ async function syncHabits() {
 // 9. INIZIALIZZAZIONE
 document.addEventListener('DOMContentLoaded', () => {
     const saveBtn = document.getElementById('save-habit-btn');
-    if(saveBtn) saveBtn.onclick = saveHabit();
+    if(saveBtn) saveBtn.onclick = saveHabit;
 
     const prevBtn = document.getElementById('prev-month');
     if(prevBtn) prevBtn.onclick = () => { 

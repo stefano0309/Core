@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORE DASHBOARD</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main-screen">
+        <header>
+            <h1 class="logo">CORE</h1>
+        </header>
+
+        <div class="top-row">
+            <div class="clock-container">
+                <div id="date-display">00. 00. 00</div>
+                <div id="digital-clock">00:00:00</div>
+            </div>
+            
+            <div class="weather-card">
+                <div class="weather-info">
+                    <p>CITY: <span id="city">ROMA</span></p>
+                    <p>TEMP: <span id="temp">--°C</span></p>
+                    <p>COND: <span id="description">LOADING...</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-bar">
+            <input type="text" id="city-input" placeholder="TYPE CITY AND PRESS ENTER TO UPDATE WEATHER...">
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="left-column">
+                <div class="task-manager">
+                    <h3>// TODO_LIST</h3>
+                    <div class="input-group">
+                        <input type="text" id="task-input" placeholder="NEW_ENTRY...">
+                        <button id="add-task">ADD</button>
+                    </div>
+                    <ul id="task-list"></ul>
+                </div>
+
+                <div class="quote-container">
+                    <h3>// DAILY_QUOTE</h3>
+                    <p id="quote-text">"LOADING..."</p>
+                    <p id="quote-author"></p>
+                </div>
+            </div>
+
+            <div class="timetable-container">
+                <div class="timetable-header">DOCENTE COORDINATORE: CHIAVASSA</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ORA</th>
+                            <th>LUNEDÌ</th>
+                            <th>MARTEDÌ</th>
+                            <th>MERCOLEDÌ</th>
+                            <th>GIOVEDÌ</th>
+                            <th>VENERDÌ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td class="cell-border"><b>LINGUA INGLESE</b><br>CASTAGNINO<br><i>141 (28)</i></td>
+                            <td class="cell-border"><b>STORIA</b><br>NARDI<br><i>T09 (26)</i></td>
+                            <td class="cell-border" rowspan="2"><b>TELECOM.</b><br>MERCADANTE<br><i>LAB.134</i></td>
+                            <td class="cell-border" rowspan="2"><b>INFORMATICA</b><br>PASCHETTA<br><i>LAB.171</i></td>
+                            <td class="cell-border" rowspan="2"><b>SISTEMI</b><br>CHIAVASSA<br><i>LAB.S18</i></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td class="cell-border"><b>SISTEMI</b><br>CHIAVASSA<br><i>LAB.171</i></td>
+                            <td class="cell-border"><b>ITALIANO</b><br>NARDI<br><i>T09 (26)</i></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td class="cell-border"><b>RELIGIONE</b><br>CAVALLERO</td>
+                            <td class="cell-border" rowspan="2"><b>INFORMATICA</b><br>ROLFO<br><i>LAB.S22</i></td>
+                            <td class="cell-border"><b>SISTEMI</b><br>CHIAVASSA<br><i>LAB.S22</i></td>
+                            <td class="cell-border" rowspan="2"><b>T.P.S.I.T.</b><br>MARCHISIO<br><i>LAB.S18</i></td>
+                            <td class="cell-border" rowspan="2"><b>SC. MOTORIE</b><br>BALLATORE<br><i>PALESTRA</i></td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td class="cell-border"><b>MATEMATICA</b><br>GARRO</td>
+                            <td class="cell-border"><b>ITALIANO</b><br>NARDI</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td class="cell-border" rowspan="2"><b>ITALIANO</b><br>NARDI</td>
+                            <td class="cell-border"><b>TELECOM.</b><br>VIADA</td>
+                            <td class="cell-border"><b>INFORMATICA</b><br>ROLFO</td>
+                            <td class="cell-border"><b>INGLESE</b><br>CASTAGNINO</td>
+                            <td class="cell-border"><b>MATEMATICA</b><br>GARRO</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td class="cell-border"><b>T.P.S.I.T.</b><br>MARCHISIO</td>
+                            <td class="cell-border"><b>MATEMATICA</b><br>GARRO</td>
+                            <td class="cell-border"><b>MATEMATICA</b><br>GARRO</td>
+                            <td class="cell-border"><b>T.P.S.I.T.</b><br>MARCHISIO</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td></td>
+                            <td class="cell-border"><b>INGLESE</b><br>CASTAGNINO</td>
+                            <td></td>
+                            <td class="cell-border"><b>STORIA</b><br>NARDI</td>
+                            <td class="ultima"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="routine-container">
+                <h3>// routine</h3>
+                <ul id="routine-table">
+                    
+                            <li><span><input type="checkbox" id="chkSveglia"></span> Sveglia 5:00</li>
+                            <li><span><input type="checkbox" id="chkAcqua"></span> Acqua 0.5L</li>
+                            <li><span><input type="checkbox" id="chkLetto"></span> Letto</li>
+                            <li><span><input type="checkbox" id="chkPersiane"></span> Persiane</li>
+                            <li><span><input type="checkbox" onchange="workoutTable()" id="workoutOption"></span> Allenamento</li>
+                                <table id="workoutTable">
+                                    <thead>
+                                        <th>Lunedi</th>
+                                        <th>Martedi</th>
+                                        <th>Giovedi</th>
+                                        <th class="ultima">Sabato</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Push up -> 4xMax</td>
+                                            <td>Rematore elastico -> 4x15</td>  
+                                            <td>Goblet squat -> 4x15</td>
+                                            <td class="ultima">Arnold press -> 4x10</td>                               
+                                        </tr>
+                                        <tr>
+                                            <td>Floor press manubri -> 4x12</td>
+                                            <td>Rematore mnubrio -> 4x12/lato</td>
+                                            <td>Bulgarian split squat -> 3x10/lato</td>
+                                            <td class="ultima">Alzate laterali drop -> 4 serie</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Military press manubri -> 4x12</td>
+                                            <td>Pullover -> 3x12</td>
+                                            <td>Staccoo rimeno -> 4x12</td>
+                                            <td class="ultima">Face Pull -> 4x20</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Alzate lateralli -> 5x20</td>
+                                            <td>Curl manubri lento -> 3x12</td>
+                                            <td>Hip thrust -> 4x15</td>
+                                            <td class="ultima">Planck -> 3x60s sec</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>Face pull elastico ->3x20</td>
+                                            <td>Polpacci -> 4x25</td>
+                                            <td class="ultima">Leg raises -> 3x15</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            <li><span><input type="checkbox" id="chkDoccia"></span> Doccia</li>
+                            <li><span><input type="checkbox" id="chkFaccia"></span> Faccia</li>
+                            <li><span><input type="checkbox" id="chkVestiti"></span> Vestiti</li>
+                            <li><span><input type="checkbox" id="chkCartella"></span> Cartella</li>
+                            <li><span><input type="checkbox" id="chkLeggere"></span> Leggere</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+/* RESET E BASI */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: 'Courier New', Courier, monospace;
+    text-transform: uppercase;
+    overflow-x: hidden;
+}
+
+.main-screen { 
+    padding: 40px; 
+    max-width: 1400px; 
+    margin: 0 auto; 
+}
+
+/* HEADER */
+header .logo {
+    font-size: 6rem;
+    text-align: center;
+    letter-spacing: 20px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #333;
+}
+
+.top-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    align-items: flex-end;
+}
+
+#digital-clock { font-size: 3rem; font-weight: bold; }
+#date-display { font-size: 1.2rem; color: #888; }
+
+.weather-info p { margin-bottom: 5px; font-size: 0.9rem; }
+
+/* SEARCH BAR */
+.search-bar { margin-bottom: 40px; }
+.search-bar input {
+    width: 100%;
+    background: transparent;
+    border: 1px solid #333;
+    padding: 12px;
+    color: #fff;
+    font-family: inherit;
+    outline: none;
+}
+
+/* GRID LAYOUT */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+}
+
+h3 { 
+    margin-bottom: 15px; 
+    font-size: 1.1rem; 
+    border-bottom: 1px solid #333; 
+    padding-bottom: 5px; 
+}
+
+/* TASK MANAGER */
+.input-group { display: flex; gap: 10px; margin-bottom: 20px; }
+.input-group input { 
+    flex: 1; background: transparent; border: 1px solid #333; 
+    padding: 8px; color: #fff; font-family: inherit;
+}
+.input-group button { 
+    background: #fff; color: #000; border: none; 
+    padding: 0 15px; cursor: pointer; font-weight: bold;
+}
+
+#task-list { list-style: none; }
+#task-list li {
+    border: 1px solid #333;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+}
+
+/* TABELLE E ROUTINE */
+.timetable-header { text-align: right; font-size: 0.8rem; margin-bottom: 10px; }
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+
+th, td {
+    border: 1px solid #222;
+    border-right: none;
+    padding: 10px;
+    text-align: left;
+    font-size: 0.75rem;
+}
+
+th { border-bottom: 2px solid #fff; color: #888; }
+
+.cell-border { border: 1px solid #fff; }
+.ultima { border-right: 1px solid #222; }
+
+/* Highlight Giorno Corrente */
+.today-highlight {
+    color: #00ff00 !important; /* Verde acceso */
+    font-weight: bold;
+}
+
+/* WORKOUT TABLE VISIBILITY */
+#workoutTable {
+    display: block; /* Default visibile */
+}
+
+/* CHECKBOX PERSONALIZZATI */
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #00ff00;
+    filter: brightness(0.9);
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+/* CITAZIONE */
+.quote-container { margin-top: 30px; border-top: 1px solid #111; padding-top: 20px; }
+#quote-text { font-style: italic; color: #ccc; margin-bottom: 10px; display: block; }
+#quote-author { color: #fff; font-weight: bold; display: block; text-align: right; }
+
+#routine-table { list-style: none; }
+#routine-table li { margin-bottom: 8px; display: flex; align-items: center; }

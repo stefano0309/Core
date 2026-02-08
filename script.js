@@ -1,9 +1,9 @@
 // CONFIGURAZIONE
 const apiKey = "29c8f4131ebc58d89d3594f4db6fdb97";
-const IP_PI = "raspberrypi.local";
-const SERVER_URL = `http://raspberrypi.local:5000/tasks`;
-const ROUTINE_URL = `http://raspberrypi.local:5000/routine`;
-const HABITS_URL = `http://raspberrypi.local:5000/habits`;
+const IP_PI = "192.168.1.132";
+const SERVER_URL = `http://${IP_PI}:5000/tasks`;
+const ROUTINE_URL = `http://${IP_PI}:5000/routine`;
+const HABITS_URL = `http://${IP_PI}:5000/habits`;
 
 let habitDataStore = []; 
 let currentViewDate = new Date();

@@ -4,7 +4,7 @@ import json
 import os
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 TASKS_FILE = "tasks.json"
 ROUTINE_FILE = "routine.json"

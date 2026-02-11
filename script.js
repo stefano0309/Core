@@ -1,6 +1,6 @@
 // CONFIGURAZIONE
 const apiKey = "29c8f4131ebc58d89d3594f4db6fdb97";
-const IP_PI = "192.168.1.132";
+const IP_PI = "100.77.254.27";
 const SERVER_URL = `http://${IP_PI}:5000/tasks`;
 const ROUTINE_URL = `http://${IP_PI}:5000/routine`;
 const HABITS_URL = `http://${IP_PI}:5000/habits`;
